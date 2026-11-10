@@ -5,15 +5,24 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.res.imageResource
 import tw.edu.pu.o365st.s1141837.canvas.ui.theme.CanvasTheme
 
 class MainActivity : ComponentActivity() {
@@ -35,21 +44,57 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun CanvasScreen(modifier: Modifier = Modifier) {
-    Canvas(
-        modifier = modifier.fillMaxSize()
+
+    var CanvasW by remember { mutableStateOf(0f) }
+    var CanvasH by remember { mutableStateOf(0f) }
+    val minionsImage: ImageBitmap =
+        ImageBitmap.imageResource(id = R.drawable.minions)
+
+
+
+    Box(
+
+    ){Canvas(
+        modifier = Modifier.fillMaxSize()
 
     ){
+
+        val minionsWidth = minionsImage.width
+        val minionsHeight = minionsImage.height
+
+        val offsetX = (size.width - minionsWidth) / 2f
+        val offsetY = (size.height - minionsHeight) / 2f
+
+        translate(0f, 0f) {
+            drawImage(minionsImage)
+        }
+
+
         drawCircle(
             Color.Magenta,
             100f,
-            Offset(100f, 100f)
+            Offset(300f, 800f)
         )
         drawRect(
             Color.Blue,
             Offset(300f, 200f),
             Size(200f, 200f),
-            style = Stroke(width = 5f) // 使用 style 控制外框樣式
+            style = Stroke(width = 10f) // 使用 style 控制外框樣式
+        )
+
+        CanvasW = size.width
+        CanvasH = size.height
+
+        drawLine(
+            Color.Red,
+            Offset(200f, 800f),
+            Offset(size.width, size.height),
+            strokeWidth = 10f
         )
 
     }
+
+        Text("畫布的寬度 $CanvasW,長度 $CanvasH")
+    }
+
 }

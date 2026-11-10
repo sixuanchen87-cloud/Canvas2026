@@ -65,7 +65,12 @@ fun CanvasScreen(modifier: Modifier = Modifier) {
             delay(80L) // 暫停 1 秒 (1000 毫秒)
             minionsX +=5
             minionsY +=10
-
+            if (CanvasW > 0f && CanvasH > 0f) {
+                if (minionsX >= CanvasW || minionsY >= CanvasH) {
+                    minionsX = 0f
+                    minionsY = 0f
+                }
+            }
         }
     }
 

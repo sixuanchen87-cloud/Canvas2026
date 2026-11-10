@@ -6,11 +6,14 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +26,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.res.imageResource
+import kotlinx.coroutines.delay
 import tw.edu.pu.o365st.s1141837.canvas.ui.theme.CanvasTheme
 
 class MainActivity : ComponentActivity() {
@@ -47,8 +51,23 @@ fun CanvasScreen(modifier: Modifier = Modifier) {
 
     var CanvasW by remember { mutableStateOf(0f) }
     var CanvasH by remember { mutableStateOf(0f) }
+
+    var minionsX by remember { mutableStateOf(0f) }
+    var minionsY by remember { mutableStateOf(0f) }
+
+    var gameOver by remember { mutableStateOf(false) }
+
     val minionsImage: ImageBitmap =
         ImageBitmap.imageResource(id = R.drawable.minions)
+
+    LaunchedEffect(gameOver) {
+        while (!gameOver) {
+            delay(80L) // 暫停 1 秒 (1000 毫秒)
+            minionsX +=5
+            minionsY +=10
+
+        }
+    }
 
 
 
@@ -65,7 +84,7 @@ fun CanvasScreen(modifier: Modifier = Modifier) {
         val offsetX = (size.width - minionsWidth) / 2f
         val offsetY = (size.height - minionsHeight) / 2f
 
-        translate(0f, 0f) {
+        translate(minionsX, minionsY) {
             drawImage(minionsImage)
         }
 
@@ -93,8 +112,16 @@ fun CanvasScreen(modifier: Modifier = Modifier) {
         )
 
     }
-
-        Text("畫布的寬度 $CanvasW,長度 $CanvasH")
+        Column{
+            Text("畫布的寬度 $CanvasW,長度 $CanvasH")
+            Button   (
+                onClick = { gameOver = !gameOver}
+            )
+            {
+                if (gameOver){Text("繼續遊戲")}
+                else{Text ("停止遊戲")}
+            }
+        }
     }
 
 }
